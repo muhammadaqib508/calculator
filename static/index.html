@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+        <meta charset="UTF-8">
+        <title>Simple Calculator</title>
+        <link rel="stylesheet" href="/static/style.css"> <!-- Link to the CSS file -->
+    </head>
+    
+</head>
+<body>
+    <h1>Welcome to Simple Calculator!</h1>
+
+    <label>Number 1:</label>
+    <input type="number" id="num1"><br><br>
+
+    <label>Number 2:</label>
+    <input type="number" id="num2"><br><br>
+
+    <button onclick="calculate('add')">Add</button>
+    <button onclick="calculate('subtract')">Subtract</button>
+    <button onclick="calculate('multiply')">Multiply</button>
+    <button onclick="calculate('divide')">Divide</button>
+
+    <h2>Result: <span id="result"></span></h2>
+    <button onclick="clearInputs()">Clear</button>
+
+    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+
+
+    <script>
+        function calculate(operation) {
+            const num1 = document.getElementById("num1").value;
+            const num2 = document.getElementById("num2").value;
+
+            fetch(`http://127.0.0.1:8000/${operation}?a=${num1}&b=${num2}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.result !== undefined) {
+                        document.getElementById("result").textContent = data.result;
+                    } else {
+                        document.getElementById("result").textContent = data.error;
+                    }
+                });
+        }
+        function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+    const buttons = document.querySelectorAll("button");
+    buttons.forEach(button => {
+        button.classList.toggle("dark-mode");
+    });
+}
+
+        function clearInputs() {
+    document.getElementById("num1").value = '';
+    document.getElementById("num2").value = '';
+    document.getElementById("result").textContent = '';
+}
+
+    </script>
+</body>
+</html>
